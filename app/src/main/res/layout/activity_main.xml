@@ -50,6 +50,7 @@
                     android:text="Login to continue" />
 
                 <EditText
+                    android:id="@+id/main_email"
                     style="@style/edit_bold_20"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,6 +60,7 @@
                     android:inputType="textEmailAddress" />
 
                 <EditText
+                    android:id="@+id/main_password"
                     style="@style/edit_bold_20"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -68,6 +70,7 @@
                     android:inputType="textPassword" />
 
                 <TextView
+                    android:id="@+id/main_forget_password"
                     style="@style/text_16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,6 +78,7 @@
                     android:text="Forget Password?" />
 
                 <Button
+                    android:id="@+id/main_login"
                     style="@style/button_18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
