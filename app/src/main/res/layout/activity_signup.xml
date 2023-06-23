@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/layout_bg"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SignupActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -13,9 +13,9 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/signup_name"
@@ -38,7 +38,6 @@
                 android:inputType="textEmailAddress" />
 
             <EditText
-                android:maxLength="10"
                 android:id="@+id/signup_contact"
                 style="@style/edit_bold_20"
                 android:layout_width="match_parent"
@@ -46,7 +45,8 @@
                 android:layout_marginHorizontal="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:hint="Contact No."
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:maxLength="10" />
 
             <EditText
                 android:id="@+id/signup_password"
@@ -69,15 +69,48 @@
                 android:inputType="textPassword" />
 
             <EditText
-                android:drawableRight="@drawable/ic_calendar"
-                android:editable="false"
                 android:id="@+id/signup_dob"
                 style="@style/edit_bold_20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:drawableRight="@drawable/ic_calendar"
+                android:editable="false"
                 android:hint="Select Date" />
+
+            <RadioGroup
+                android:id="@+id/signup_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/signup_male"
+                    style="@style/radio_16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Male" />
+
+                <RadioButton
+                    android:id="@+id/signup_female"
+                    style="@style/radio_16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Female" />
+
+            </RadioGroup>
+
+            <Spinner
+                android:id="@+id/signup_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp" />
 
             <Button
                 android:id="@+id/signup_button"

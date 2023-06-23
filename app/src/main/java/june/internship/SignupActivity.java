@@ -5,9 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -23,6 +28,15 @@ public class SignupActivity extends AppCompatActivity {
 
     Calendar calendar;
 
+    //RadioButton male,female;
+    RadioGroup gender;
+
+    Spinner city;
+
+    String[] cityArray = {"Select City","Ahmedabad","Vadodara","Surat","Rajkot","Gandhinagar","Mehsana"};
+
+    String sCity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +49,57 @@ public class SignupActivity extends AppCompatActivity {
         confirmPassword = findViewById(R.id.signup_confirm_password);
 
         dob = findViewById(R.id.signup_dob);
+
+        gender = findViewById(R.id.signup_gender);
+
+        gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton radioButton = findViewById(i);
+                Toast.makeText(SignupActivity.this, radioButton.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        /*male = findViewById(R.id.signup_male);
+        female = findViewById(R.id.signup_female);
+
+        male.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(SignupActivity.this, male.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        female.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(SignupActivity.this, female.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
+        city = findViewById(R.id.signup_city);
+        //city.setPrompt("Select City");
+        ArrayAdapter adapter = new ArrayAdapter(SignupActivity.this, android.R.layout.simple_list_item_1,cityArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_checked);
+        city.setAdapter(adapter);
+
+        city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i==0){
+                    sCity = "";
+                }
+                else {
+                    sCity = cityArray[i];
+                    Toast.makeText(SignupActivity.this, sCity, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         calendar = Calendar.getInstance();
 
@@ -102,6 +167,12 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 else if(dob.getText().toString().trim().equals("")){
                     Toast.makeText(SignupActivity.this, "Please Select Date Of Birth", Toast.LENGTH_SHORT).show();
+                }
+                else if(gender.getCheckedRadioButtonId() == -1){
+                    Toast.makeText(SignupActivity.this, "Please Select Gender", Toast.LENGTH_SHORT).show();
+                }
+                else if(sCity.equals("")){
+                    Toast.makeText(SignupActivity.this, "Please Select City", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(SignupActivity.this, "Signup Successfully", Toast.LENGTH_SHORT).show();
