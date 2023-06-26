@@ -1,6 +1,8 @@
 package june.internship;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +23,16 @@ public class MainActivity extends AppCompatActivity {
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     TextView forgetPassword,createAccount;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db = openOrCreateDatabase("JuneInternship",MODE_PRIVATE,null);
+        String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(100),EMAIL VARCHAR(100),CONTACT INT(10),PASSWORD VARCHAR(20),DOB VARCHAR(10),GENDER VARCHAR(10),CITY VARCHAR(50))";
+        db.execSQL(tableQuery);
 
         email = findViewById(R.id.main_email);
         password = findViewById(R.id.main_password);
@@ -48,15 +55,22 @@ public class MainActivity extends AppCompatActivity {
                     password.setError("Min. 6 Char Password Required");
                 }
                 else{
-                    System.out.println("Login Successfully");
-                    Log.d("SILVEROAK","Login Successfully");
-                    Log.e("SILVEROAK","Login Successfully");
-                    Toast.makeText(MainActivity.this,"Login Successfully",Toast.LENGTH_LONG).show();
-                    Snackbar.make(view,"Login Successfully",Snackbar.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(MainActivity.this,HomeActivity.class);
-                    startActivity(intent);
+                    String selectQuery = "SELECT * FROM USERS WHERE EMAIL='"+email.getText().toString()+"' AND PASSWORD='"+password.getText().toString()+"'";
+                    Cursor cursor = db.rawQuery(selectQuery,null);
+                    if(cursor.getCount()>0){
+                        System.out.println("Login Successfully");
+                        Log.d("SILVEROAK","Login Successfully");
+                        Log.e("SILVEROAK","Login Successfully");
+                        Toast.makeText(MainActivity.this,"Login Successfully",Toast.LENGTH_LONG).show();
+                        Snackbar.make(view,"Login Successfully",Snackbar.LENGTH_SHORT).show();
 
+                        Intent intent = new Intent(MainActivity.this,HomeActivity.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this,"Login Unsuccessfully",Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

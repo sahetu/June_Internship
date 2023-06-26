@@ -3,6 +3,8 @@ package june.internship;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,12 +37,17 @@ public class SignupActivity extends AppCompatActivity {
 
     String[] cityArray = {"Select City","Ahmedabad","Vadodara","Surat","Rajkot","Gandhinagar","Mehsana"};
 
-    String sCity;
+    String sCity,sGender;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        db = openOrCreateDatabase("JuneInternship",MODE_PRIVATE,null);
+        String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(100),EMAIL VARCHAR(100),CONTACT INT(10),PASSWORD VARCHAR(20),DOB VARCHAR(10),GENDER VARCHAR(10),CITY VARCHAR(50))";
+        db.execSQL(tableQuery);
 
         name = findViewById(R.id.signup_name);
         email = findViewById(R.id.signup_email);
@@ -56,7 +63,8 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton radioButton = findViewById(i);
-                Toast.makeText(SignupActivity.this, radioButton.getText().toString(), Toast.LENGTH_SHORT).show();
+                sGender = radioButton.getText().toString();
+                Toast.makeText(SignupActivity.this, sGender, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -175,8 +183,17 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "Please Select City", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(SignupActivity.this, "Signup Successfully", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+                    String selectQuery = "SELECT * FROM USERS WHERE EMAIL='"+email.getText().toString()+"' OR CONTACT='"+contact.getText().toString()+"'";
+                    Cursor cursor = db.rawQuery(selectQuery,null);
+                    if(cursor.getCount()>0){
+                        Toast.makeText(SignupActivity.this, "Email/Contact Already Registered", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        String insertQuery = "INSERT INTO USERS VALUES (NULL,'" + name.getText().toString() + "','" + email.getText().toString() + "','" + contact.getText().toString() + "','" + password.getText().toString() + "','" + dob.getText().toString() + "','" + sGender + "','" + sCity + "')";
+                        db.execSQL(insertQuery);
+                        Toast.makeText(SignupActivity.this, "Signup Successfully", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
                 }
             }
         });
