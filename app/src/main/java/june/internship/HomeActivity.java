@@ -129,7 +129,17 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         editProfile = findViewById(R.id.home_edit_profile);
+
         changePassword = findViewById(R.id.home_change_password);
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this,ChangePasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         logout = findViewById(R.id.home_logout);
 
         submit = findViewById(R.id.home_submit_profile);
