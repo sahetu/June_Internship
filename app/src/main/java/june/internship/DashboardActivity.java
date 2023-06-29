@@ -12,8 +12,8 @@ public class DashboardActivity extends AppCompatActivity {
     MeowBottomNavigation meowBottomNavigation;
 
     int HOME_MENU = 1;
-    int DASHBOARD_MENU = 2;
-    int NOTIFICATION_MENU = 3;
+    int CATEGORY_MENU = 2;
+    int PROFILE_MENU = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,8 @@ public class DashboardActivity extends AppCompatActivity {
         meowBottomNavigation = findViewById(R.id.dashboard_bottom);
 
         meowBottomNavigation.add(new MeowBottomNavigation.Model(HOME_MENU, R.drawable.ic_home_black_24dp));
-        meowBottomNavigation.add(new MeowBottomNavigation.Model(DASHBOARD_MENU, R.drawable.ic_dashboard_black_24dp));
-        meowBottomNavigation.add(new MeowBottomNavigation.Model(NOTIFICATION_MENU, R.drawable.ic_notifications_black_24dp));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(CATEGORY_MENU, R.drawable.ic_category));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(PROFILE_MENU, R.drawable.ic_user));
 
         //meowBottomNavigation.show(HOME_MENU,true);
 
@@ -35,13 +35,13 @@ public class DashboardActivity extends AppCompatActivity {
                     FragmentManager manager = getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.dashboard_layout, new HomeFragment()).commit();
                 }
-                if (item.getId() == DASHBOARD_MENU) {
+                if (item.getId() == CATEGORY_MENU) {
                     FragmentManager manager = getSupportFragmentManager();
-                    manager.beginTransaction().replace(R.id.dashboard_layout, new HomeFragment()).commit();
+                    manager.beginTransaction().replace(R.id.dashboard_layout, new CategoryFragment()).commit();
                 }
-                if (item.getId() == NOTIFICATION_MENU) {
+                if (item.getId() == PROFILE_MENU) {
                     FragmentManager manager = getSupportFragmentManager();
-                    manager.beginTransaction().replace(R.id.dashboard_layout, new HomeFragment()).commit();
+                    manager.beginTransaction().replace(R.id.dashboard_layout, new ProfileFragment()).commit();
                 }
                 //Toast.makeText(DashboardActivity.this, "clicked item : " + item.getId(), Toast.LENGTH_SHORT).show();
             }
@@ -66,4 +66,11 @@ public class DashboardActivity extends AppCompatActivity {
         manager.beginTransaction().replace(R.id.dashboard_layout, new HomeFragment()).commit();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        finishAffinity();
+    }
+
 }

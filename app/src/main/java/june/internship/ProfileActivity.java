@@ -3,7 +3,6 @@ package june.internship;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,10 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class HomeActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     EditText name,email,contact,dob;
-    Button editProfile,submit,changePassword,logout;
+    Button editProfile,submit;
 
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
@@ -46,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_profile);
 
         sp = getSharedPreferences(ConstantData.PREF,MODE_PRIVATE);
 
@@ -67,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton radioButton = findViewById(i);
                 sGender = radioButton.getText().toString();
-                Toast.makeText(HomeActivity.this, sGender, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, sGender, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -76,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
 
         city = findViewById(R.id.home_city);
         //city.setPrompt("Select City");
-        ArrayAdapter adapter = new ArrayAdapter(HomeActivity.this, android.R.layout.simple_list_item_1,cityArray);
+        ArrayAdapter adapter = new ArrayAdapter(ProfileActivity.this, android.R.layout.simple_list_item_1,cityArray);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_checked);
         city.setAdapter(adapter);
 
@@ -88,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 else {
                     sCity = cityArray[i];
-                    Toast.makeText(HomeActivity.this, sCity, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, sCity, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -116,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog dialog = new DatePickerDialog(HomeActivity.this,dateClick,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+                DatePickerDialog dialog = new DatePickerDialog(ProfileActivity.this,dateClick,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
 
                 //Select Past Date
                 //dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -129,18 +128,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         editProfile = findViewById(R.id.home_edit_profile);
-
-        changePassword = findViewById(R.id.home_change_password);
-
-        changePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this,ChangePasswordActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        logout = findViewById(R.id.home_logout);
 
         submit = findViewById(R.id.home_submit_profile);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -162,13 +149,13 @@ public class HomeActivity extends AppCompatActivity {
                     contact.setError("Valid Contact No. Required");
                 }
                 else if(dob.getText().toString().trim().equals("")){
-                    Toast.makeText(HomeActivity.this, "Please Select Date Of Birth", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Please Select Date Of Birth", Toast.LENGTH_SHORT).show();
                 }
                 else if(gender.getCheckedRadioButtonId() == -1){
-                    Toast.makeText(HomeActivity.this, "Please Select Gender", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Please Select Gender", Toast.LENGTH_SHORT).show();
                 }
                 else if(sCity.equals("")){
-                    Toast.makeText(HomeActivity.this, "Please Select City", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Please Select City", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     String selectQuery = "SELECT * FROM USERS WHERE USERID='"+sp.getString(ConstantData.USERID,"")+"'";
@@ -176,7 +163,7 @@ public class HomeActivity extends AppCompatActivity {
                     if(cursor.getCount()>0){
                         String updateQuery = "UPDATE USERS SET NAME='"+name.getText().toString()+"',EMAIL='"+email.getText().toString()+"',CONTACT='"+contact.getText().toString()+"',DOB='"+dob.getText().toString()+"',GENDER='"+sGender+"',CITY='"+sCity+"' WHERE USERID='"+sp.getString(ConstantData.USERID,"")+"'";
                         db.execSQL(updateQuery);
-                        Toast.makeText(HomeActivity.this, "Profile Update Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Profile Update Successfully", Toast.LENGTH_SHORT).show();
 
                         sp.edit().putString(ConstantData.NAME,name.getText().toString()).commit();
                         sp.edit().putString(ConstantData.EMAIL,email.getText().toString()).commit();
@@ -188,7 +175,7 @@ public class HomeActivity extends AppCompatActivity {
                         setData(false);
                     }
                     else {
-                        Toast.makeText(HomeActivity.this, "Invalid User Id", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Invalid User Id", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -200,16 +187,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setData(true);
-            }
-        });
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //sp.edit().remove(ConstantData.USERID).commit();
-                sp.edit().clear().commit();
-                Intent intent = new Intent(HomeActivity.this,MainActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -262,11 +239,5 @@ public class HomeActivity extends AppCompatActivity {
             editProfile.setVisibility(View.VISIBLE);
             submit.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        finishAffinity();
     }
 }
