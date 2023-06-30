@@ -12,4 +12,6 @@ public class ConstantData {
     public static String CITY = "city";
     public static String GENDER = "gender";
 
+    public static String PRICE_SYMBOL = "₹";
+
 }
