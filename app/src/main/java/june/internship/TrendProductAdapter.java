@@ -1,6 +1,8 @@
 package june.internship;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,13 @@ public class TrendProductAdapter extends RecyclerView.Adapter<TrendProductAdapte
 
     Context context;
     ArrayList<ProductList> trendProdArray;
+
+    SharedPreferences sp;
+
     public TrendProductAdapter(Context context, ArrayList<ProductList> trendProdArray) {
         this.context = context;
         this.trendProdArray = trendProdArray;
+        sp = context.getSharedPreferences(ConstantData.PREF,Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -46,6 +52,20 @@ public class TrendProductAdapter extends RecyclerView.Adapter<TrendProductAdapte
         holder.name.setText(trendProdArray.get(position).getName());
         holder.price.setText(ConstantData.PRICE_SYMBOL+trendProdArray.get(position).getPrice()+"/"+trendProdArray.get(position).getUnit());
         holder.imageView.setImageResource(trendProdArray.get(position).getImage());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sp.edit().putString(ConstantData.PRODUCT_NAME,trendProdArray.get(position).getName()).commit();
+                sp.edit().putString(ConstantData.PRODUCT_PRICE,trendProdArray.get(position).getPrice()).commit();
+                sp.edit().putString(ConstantData.PRODUCT_UNIT,trendProdArray.get(position).getUnit()).commit();
+                sp.edit().putString(ConstantData.PRODUCT_DESCRIPTION,trendProdArray.get(position).getDescription()).commit();
+                sp.edit().putString(ConstantData.PRODUCT_IMAGE, String.valueOf(trendProdArray.get(position).getImage())).commit();
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override

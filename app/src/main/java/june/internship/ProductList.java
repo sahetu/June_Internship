@@ -2,7 +2,7 @@ package june.internship;
 
 public class ProductList {
 
-String name,price,unit;
+String name,price,unit,description;
 int image;
 
     public String getName() {
@@ -27,6 +27,14 @@ int image;
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getImage() {
