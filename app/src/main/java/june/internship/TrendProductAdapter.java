@@ -56,6 +56,7 @@ public class TrendProductAdapter extends RecyclerView.Adapter<TrendProductAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sp.edit().putString(ConstantData.PRODUCT_ID,trendProdArray.get(position).getProductId()).commit();
                 sp.edit().putString(ConstantData.PRODUCT_NAME,trendProdArray.get(position).getName()).commit();
                 sp.edit().putString(ConstantData.PRODUCT_PRICE,trendProdArray.get(position).getPrice()).commit();
                 sp.edit().putString(ConstantData.PRODUCT_UNIT,trendProdArray.get(position).getUnit()).commit();

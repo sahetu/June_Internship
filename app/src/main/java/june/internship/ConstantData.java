@@ -14,6 +14,7 @@ public class ConstantData {
 
     public static String PRICE_SYMBOL = "₹";
 
+    public static String PRODUCT_ID = "product_id";
     public static String PRODUCT_NAME = "product_name";
     public static String PRODUCT_PRICE = "product_price";
     public static String PRODUCT_UNIT = "product_unit";

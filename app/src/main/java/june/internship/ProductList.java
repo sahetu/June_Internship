@@ -2,8 +2,16 @@ package june.internship;
 
 public class ProductList {
 
-String name,price,unit,description;
+String productId,name,price,unit,description;
 int image;
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
     public String getName() {
         return name;
