@@ -1,5 +1,9 @@
 package june.internship;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -51,6 +55,9 @@ public class HomeFragment extends Fragment {
 
     ArrayList<ProductList> prodArray;
 
+    SharedPreferences sp;
+    SQLiteDatabase db;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -61,7 +68,26 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        db = getActivity().openOrCreateDatabase("JuneInternship", Context.MODE_PRIVATE, null);
+        String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(100),EMAIL VARCHAR(100),CONTACT INT(10),PASSWORD VARCHAR(20),DOB VARCHAR(10),GENDER VARCHAR(10),CITY VARCHAR(50))";
+        db.execSQL(tableQuery);
+
+        String wishlistTableQuery = "CREATE TABLE IF NOT EXISTS WISHLIST(WISHLISTID INTEGER PRIMARY KEY AUTOINCREMENT,USERID INT(10),PRODUCTID INT(10),PRICE VARCHAR(10),UNIT VARCHAR(10),DESCRIPTION TEXT,IMAGE VARCHAR(100))";
+        db.execSQL(wishlistTableQuery);
+
+        String cartTableQuery = "CREATE TABLE IF NOT EXISTS CART(CARTID INTEGER PRIMARY KEY AUTOINCREMENT,ORDERID INT(10),USERID INT(10),PRODUCTID INT(10),PRICE VARCHAR(10),UNIT VARCHAR(10),DESCRIPTION TEXT,IMAGE VARCHAR(100),QTY INT(10),TOTALPRICE VARCHAR(50))";
+        db.execSQL(cartTableQuery);
+
+        sp = getActivity().getSharedPreferences(ConstantData.PREF, Context.MODE_PRIVATE);
+
         trandingProductsRecycler = view.findViewById(R.id.home_tranding_products);
+
+        productsRecycler = view.findViewById(R.id.home_products);
+
+        return view;
+    }
+
+    private void setData() {
         trandingProductsRecycler.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
         trandingProductsRecycler.setItemAnimator(new DefaultItemAnimator());
         trandingProductsRecycler.setNestedScrollingEnabled(false);
@@ -75,17 +101,33 @@ public class HomeFragment extends Fragment {
             list.setUnit(trendProdUnit[i]);
             list.setDescription(trendProdDesc[i]);
             list.setImage(trendProdImage[i]);
+
+            String checkCartQuery = "SELECT * FROM CART WHERE PRODUCTID='"+trendingProdId[i]+"' AND USERID='"+sp.getString(ConstantData.USERID,"")+"' AND ORDERID='0'";
+            Cursor cursorCart = db.rawQuery(checkCartQuery,null);
+            if(cursorCart.getCount()>0){
+                list.setAddedCart(true);
+            }
+            else{
+                list.setAddedCart(false);
+            }
+
+            String checkWishlistQuery = "SELECT * FROM WISHLIST WHERE PRODUCTID='"+trendingProdId[i]+"' AND USERID='"+sp.getString(ConstantData.USERID,"")+"'";
+            Cursor cursor = db.rawQuery(checkWishlistQuery,null);
+            if(cursor.getCount()>0){
+                list.setAddedWishlist(true);
+            }
+            else{
+                list.setAddedWishlist(false);
+            }
+
             trendProdArray.add(list);
         }
         TrendProductAdapter adapter = new TrendProductAdapter(getActivity(), trendProdArray);
         trandingProductsRecycler.setAdapter(adapter);
 
-
-        productsRecycler = view.findViewById(R.id.home_products);
         productsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         productsRecycler.setItemAnimator(new DefaultItemAnimator());
         productsRecycler.setNestedScrollingEnabled(false);
-
         prodArray = new ArrayList<>();
         for (int i = 0; i < prodName.length; i++) {
             ProductList list = new ProductList();
@@ -95,11 +137,34 @@ public class HomeFragment extends Fragment {
             list.setUnit(prodUnit[i]);
             list.setDescription(prodDescription[i]);
             list.setImage(prodImage[i]);
+
+            String checkCartQuery = "SELECT * FROM CART WHERE PRODUCTID='"+prodId[i]+"' AND USERID='"+sp.getString(ConstantData.USERID,"")+"' AND ORDERID='0'";
+            Cursor cursorCart = db.rawQuery(checkCartQuery,null);
+            if(cursorCart.getCount()>0){
+                list.setAddedCart(true);
+            }
+            else{
+                list.setAddedCart(false);
+            }
+
+            String checkWishlistQuery = "SELECT * FROM WISHLIST WHERE PRODUCTID='"+prodId[i]+"' AND USERID='"+sp.getString(ConstantData.USERID,"")+"'";
+            Cursor cursor = db.rawQuery(checkWishlistQuery,null);
+            if(cursor.getCount()>0){
+                list.setAddedWishlist(true);
+            }
+            else{
+                list.setAddedWishlist(false);
+            }
+
             prodArray.add(list);
         }
         ProductAdapter prodAdapter = new ProductAdapter(getActivity(), prodArray);
         productsRecycler.setAdapter(prodAdapter);
+    }
 
-        return view;
+    @Override
+    public void onResume() {
+        super.onResume();
+        setData();
     }
 }

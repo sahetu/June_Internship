@@ -23,22 +23,77 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/custom_product_name"
-                style="@style/text_bold_18"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/custom_product_price"
-                style="@style/text_16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp" />
+                <LinearLayout
+                    android:id="@+id/custom_product_cart_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/custom_product_add_cart"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:src="@drawable/add_cart" />
+
+                    <ImageView
+                        android:id="@+id/custom_product_remove_cart"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:src="@drawable/remove_cart"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/custom_product_wishlist_blank"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:src="@drawable/wishlist_blank" />
+
+                    <ImageView
+                        android:id="@+id/custom_product_remove_wishlist"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:src="@drawable/wishlist"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_toLeftOf="@+id/custom_product_cart_layout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/custom_product_name"
+                        style="@style/text_bold_18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp" />
+
+                    <TextView
+                        android:id="@+id/custom_product_price"
+                        style="@style/text_16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
