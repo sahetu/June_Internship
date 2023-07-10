@@ -13,7 +13,9 @@ public class DashboardActivity extends AppCompatActivity {
 
     int HOME_MENU = 1;
     int CATEGORY_MENU = 2;
-    int PROFILE_MENU = 3;
+    int CART_MENU = 3;
+    int WISHLIST_MENU = 4;
+    int PROFILE_MENU = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,8 @@ public class DashboardActivity extends AppCompatActivity {
 
         meowBottomNavigation.add(new MeowBottomNavigation.Model(HOME_MENU, R.drawable.ic_home_black_24dp));
         meowBottomNavigation.add(new MeowBottomNavigation.Model(CATEGORY_MENU, R.drawable.ic_category));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(CART_MENU, R.drawable.add_cart));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(WISHLIST_MENU, R.drawable.wishlist));
         meowBottomNavigation.add(new MeowBottomNavigation.Model(PROFILE_MENU, R.drawable.ic_user));
 
         //meowBottomNavigation.show(HOME_MENU,true);
@@ -38,6 +42,14 @@ public class DashboardActivity extends AppCompatActivity {
                 if (item.getId() == CATEGORY_MENU) {
                     FragmentManager manager = getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.dashboard_layout, new CategoryFragment()).commit();
+                }
+                if (item.getId() == CART_MENU) {
+                    FragmentManager manager = getSupportFragmentManager();
+                    manager.beginTransaction().replace(R.id.dashboard_layout, new CartFragment()).commit();
+                }
+                if (item.getId() == WISHLIST_MENU) {
+                    FragmentManager manager = getSupportFragmentManager();
+                    manager.beginTransaction().replace(R.id.dashboard_layout, new WishlistFragment()).commit();
                 }
                 if (item.getId() == PROFILE_MENU) {
                     FragmentManager manager = getSupportFragmentManager();

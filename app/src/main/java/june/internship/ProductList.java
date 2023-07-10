@@ -2,26 +2,10 @@ package june.internship;
 
 public class ProductList {
 
-String productId,name,price,unit,description;
+String productId,name,price,unit,description,qty,totalPrice;
 int image;
 boolean isAddedCart = false;
 boolean isAddedWishlist = false;
-
-    public boolean isAddedWishlist() {
-        return isAddedWishlist;
-    }
-
-    public void setAddedWishlist(boolean addedWishlist) {
-        isAddedWishlist = addedWishlist;
-    }
-
-    public boolean isAddedCart() {
-        return isAddedCart;
-    }
-
-    public void setAddedCart(boolean addedCart) {
-        isAddedCart = addedCart;
-    }
 
     public String getProductId() {
         return productId;
@@ -63,11 +47,43 @@ boolean isAddedWishlist = false;
         this.description = description;
     }
 
+    public String getQty() {
+        return qty;
+    }
+
+    public void setQty(String qty) {
+        this.qty = qty;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     public int getImage() {
         return image;
     }
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public boolean isAddedCart() {
+        return isAddedCart;
+    }
+
+    public void setAddedCart(boolean addedCart) {
+        isAddedCart = addedCart;
+    }
+
+    public boolean isAddedWishlist() {
+        return isAddedWishlist;
+    }
+
+    public void setAddedWishlist(boolean addedWishlist) {
+        isAddedWishlist = addedWishlist;
     }
 }
