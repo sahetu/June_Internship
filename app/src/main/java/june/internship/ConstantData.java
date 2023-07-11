@@ -21,4 +21,6 @@ public class ConstantData {
     public static String PRODUCT_DESCRIPTION = "product_description";
     public static String PRODUCT_IMAGE = "product_image";
 
+    public static String CART_TOTAL = "cart_total";
+
 }

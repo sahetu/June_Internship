@@ -1,6 +1,7 @@
 package june.internship;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -56,12 +57,21 @@ public class CartFragment extends Fragment {
 
         checkout = view.findViewById(R.id.cart_checkout);
 
+        checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sp.edit().putString(ConstantData.CART_TOTAL, String.valueOf(iTotal)).commit();
+                Intent intent = new Intent(getActivity(), ShippingActivity.class);
+                startActivity(intent);
+            }
+        });
+
         recyclerView = view.findViewById(R.id.cart_recyclerview);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
-        String cartQuery = "SELECT * FROM CART WHERE USERID='" + sp.getString(ConstantData.USERID, "") + "'";
+        String cartQuery = "SELECT * FROM CART WHERE USERID='" + sp.getString(ConstantData.USERID, "") + "' AND ORDERID='0'";
         Cursor cursor = db.rawQuery(cartQuery, null);
         if (cursor.getCount() > 0) {
             iTotal = 0;
