@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,8 @@ public class CartFragment extends Fragment {
     public static Button checkout;
 
     public static int iTotal = 0;
+
+    public static RelativeLayout defaultLayout,dataLayout;
 
     public CartFragment() {
         // Required empty public constructor
@@ -66,6 +69,9 @@ public class CartFragment extends Fragment {
             }
         });
 
+        defaultLayout = view.findViewById(R.id.cart_default_layout);
+        dataLayout = view.findViewById(R.id.cart_data_layout);
+
         recyclerView = view.findViewById(R.id.cart_recyclerview);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -74,6 +80,9 @@ public class CartFragment extends Fragment {
         String cartQuery = "SELECT * FROM CART WHERE USERID='" + sp.getString(ConstantData.USERID, "") + "' AND ORDERID='0'";
         Cursor cursor = db.rawQuery(cartQuery, null);
         if (cursor.getCount() > 0) {
+            defaultLayout.setVisibility(View.GONE);
+            dataLayout.setVisibility(View.VISIBLE);
+
             iTotal = 0;
             checkout.setVisibility(View.VISIBLE);
             arrayList = new ArrayList<>();
@@ -113,6 +122,8 @@ public class CartFragment extends Fragment {
             checkout.setText("Checkout With " + ConstantData.PRICE_SYMBOL + iTotal);
 
         } else {
+            defaultLayout.setVisibility(View.VISIBLE);
+            dataLayout.setVisibility(View.GONE);
             checkout.setVisibility(View.GONE);
         }
         return view;

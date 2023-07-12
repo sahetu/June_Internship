@@ -5,9 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".WishlistFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wishlist_recycler"
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/wishlist_default_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:src="@drawable/wishlist_default_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/wishlist_data_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wishlist_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

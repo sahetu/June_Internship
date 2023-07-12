@@ -2,6 +2,7 @@ package june.internship;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,11 +20,17 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class ShippingActivity extends AppCompatActivity {
+public class ShippingActivity extends AppCompatActivity implements PaymentResultListener {
 
     EditText name, contact, address;
     Button payNow;
@@ -35,7 +42,7 @@ public class ShippingActivity extends AppCompatActivity {
 
     String[] cityArray = {"Select City", "Ahmedabad", "Vadodara", "Surat", "Rajkot", "Gandhinagar", "Mehsana"};
 
-    String sCity, sPaymentMethod,sTransactionId="";
+    String sCity, sPaymentMethod, sTransactionId = "";
     SQLiteDatabase db;
     SharedPreferences sp;
 
@@ -96,12 +103,12 @@ public class ShippingActivity extends AppCompatActivity {
             }
         });
 
-        name.setText(sp.getString(ConstantData.NAME,""));
-        contact.setText(sp.getString(ConstantData.CONTACT,""));
-        sCity = sp.getString(ConstantData.CITY,"");
+        name.setText(sp.getString(ConstantData.NAME, ""));
+        contact.setText(sp.getString(ConstantData.CONTACT, ""));
+        sCity = sp.getString(ConstantData.CITY, "");
         int iCityPosition = 0;
-        for(int i=0;i<cityArray.length;i++){
-            if(sCity.equalsIgnoreCase(cityArray[i])){
+        for (int i = 0; i < cityArray.length; i++) {
+            if (sCity.equalsIgnoreCase(cityArray[i])) {
                 iCityPosition = i;
                 break;
             }
@@ -109,7 +116,7 @@ public class ShippingActivity extends AppCompatActivity {
         city.setSelection(iCityPosition);
 
         payNow = findViewById(R.id.shipping_button);
-        payNow.setText("Pay "+ConstantData.PRICE_SYMBOL+sp.getString(ConstantData.CART_TOTAL,""));
+        payNow.setText("Pay " + ConstantData.PRICE_SYMBOL + sp.getString(ConstantData.CART_TOTAL, ""));
         payNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,14 +133,12 @@ public class ShippingActivity extends AppCompatActivity {
                 } else if (paymentMethod.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(ShippingActivity.this, "Please Select Gender", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(sPaymentMethod.equals("Cash On Delivery")){
+                    if (sPaymentMethod.equals("Cash On Delivery")) {
                         sTransactionId = "";
                         addOrder(sTransactionId);
-                    }
-                    else if(sPaymentMethod.equals("Online")){
-
-                    }
-                    else{
+                    } else if (sPaymentMethod.equals("Online")) {
+                        startPayment();
+                    } else {
 
                     }
                 }
@@ -142,24 +147,64 @@ public class ShippingActivity extends AppCompatActivity {
 
     }
 
+    private void startPayment() {
+        Activity activity = this;
+        Checkout co = new Checkout();
+
+        try {
+            JSONObject object = new JSONObject();
+            object.put("name", getResources().getString(R.string.app_name));
+            object.put("description", "Online Purchase Product");
+            object.put("send_sms_hash", true);
+            object.put("allow_rotation", true);
+            object.put("image", R.mipmap.ic_launcher);
+            object.put("currency", "INR");
+            object.put("amount", Integer.parseInt(sp.getString(ConstantData.CART_TOTAL, "")) * 100);
+
+            JSONObject prefill = new JSONObject();
+            prefill.put("email", sp.getString(ConstantData.EMAIL, ""));
+            prefill.put("contact", sp.getString(ConstantData.CONTACT, ""));
+
+            object.put("prefill", prefill);
+
+            co.open(activity, object);
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
     private void addOrder(String sTransactionId) {
-        String shipping_insert = "INSERT INTO SHIPPING_ORDER VALUES(NULL,'"+sp.getString(ConstantData.USERID,"")+"','"+name.getText().toString()+"','"+contact.getText().toString()+"','"+address.getText().toString()+"','"+sCity+"','"+sp.getString(ConstantData.CART_TOTAL,"")+"','"+sPaymentMethod+"','"+sTransactionId+"')";
+        String shipping_insert = "INSERT INTO SHIPPING_ORDER VALUES(NULL,'" + sp.getString(ConstantData.USERID, "") + "','" + name.getText().toString() + "','" + contact.getText().toString() + "','" + address.getText().toString() + "','" + sCity + "','" + sp.getString(ConstantData.CART_TOTAL, "") + "','" + sPaymentMethod + "','" + sTransactionId + "')";
         db.execSQL(shipping_insert);
 
         String selectQuery = "SELECT MAX(ORDERID) FROM SHIPPING_ORDER";
-        Cursor cursor = db.rawQuery(selectQuery,null);
+        Cursor cursor = db.rawQuery(selectQuery, null);
         String sOrderId = "";
-        if(cursor.getCount()>0){
-            while (cursor.moveToNext()){
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
                 sOrderId = cursor.getString(0);
             }
         }
 
-        String cartUpdate = "UPDATE CART SET ORDERID='"+sOrderId+"' WHERE ORDERID='0' AND USERID='"+sp.getString(ConstantData.USERID,"")+"'";
+        String cartUpdate = "UPDATE CART SET ORDERID='" + sOrderId + "' WHERE ORDERID='0' AND USERID='" + sp.getString(ConstantData.USERID, "") + "'";
         db.execSQL(cartUpdate);
 
         Toast.makeText(ShippingActivity.this, "Order Placed Successfully", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(ShippingActivity.this,DashboardActivity.class);
+        Intent intent = new Intent(ShippingActivity.this, DashboardActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPaymentSuccess(String s) {
+        sTransactionId = s;
+        addOrder(sTransactionId);
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 }

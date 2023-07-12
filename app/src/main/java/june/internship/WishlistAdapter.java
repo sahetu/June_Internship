@@ -107,6 +107,16 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyHold
                 String wishlistRemoveQuery = "DELETE FROM WISHLIST WHERE PRODUCTID='"+trendProdArray.get(position).getProductId()+"' AND USERID='"+sp.getString(ConstantData.USERID,"")+"'";
                 db.execSQL(wishlistRemoveQuery);
                 trendProdArray.remove(position);
+
+                if(trendProdArray.size()>0){
+                    WishlistFragment.defaultLayout.setVisibility(View.GONE);
+                    WishlistFragment.dataLayout.setVisibility(View.VISIBLE);
+                }
+                else{
+                    WishlistFragment.defaultLayout.setVisibility(View.VISIBLE);
+                    WishlistFragment.dataLayout.setVisibility(View.GONE);
+                }
+
                 notifyDataSetChanged();
             }
         });

@@ -7,4 +7,5 @@
     <color name="yellow">#E2A700</color>
     <color name="dark_yellow">#BC8B00</color>
     <color name="black_gray">#201E28</color>
+    <color name="cart_default_color">#F7F7F7</color>
 </resources>

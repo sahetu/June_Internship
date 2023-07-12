@@ -88,9 +88,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyHolder> {
 
                 if(CartFragment.iTotal==0){
                     CartFragment.checkout.setVisibility(View.GONE);
+                    CartFragment.dataLayout.setVisibility(View.GONE);
+                    CartFragment.defaultLayout.setVisibility(View.VISIBLE);
                 }
                 else{
                     CartFragment.checkout.setVisibility(View.VISIBLE);
+                    CartFragment.dataLayout.setVisibility(View.VISIBLE);
+                    CartFragment.defaultLayout.setVisibility(View.GONE);
                     CartFragment.checkout.setText("Checkout With "+ConstantData.PRICE_SYMBOL+CartFragment.iTotal);
                 }
 

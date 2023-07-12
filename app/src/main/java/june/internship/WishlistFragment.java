@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class WishlistFragment extends Fragment {
 
     String[] prodId = {"1", "2", "3", "4", "5", "6", "7"};
     String[] prodName = {"Butter", "Cloth", "Bread", "Makup Kit", "Cloth", "Bread", "Makup Kit"};
+
+    public static RelativeLayout defaultLayout,dataLayout;
 
     public WishlistFragment() {
         // Required empty public constructor
@@ -50,6 +53,9 @@ public class WishlistFragment extends Fragment {
 
         sp = getActivity().getSharedPreferences(ConstantData.PREF, Context.MODE_PRIVATE);
 
+        defaultLayout = view.findViewById(R.id.wishlist_default_layout);
+        dataLayout = view.findViewById(R.id.wishlist_data_layout);
+
         recyclerView = view.findViewById(R.id.wishlist_recycler);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -58,6 +64,9 @@ public class WishlistFragment extends Fragment {
         String wishlistQuery = "SELECT * FROM WISHLIST WHERE USERID='" + sp.getString(ConstantData.USERID, "") + "'";
         Cursor cursor = db.rawQuery(wishlistQuery, null);
         if (cursor.getCount() > 0) {
+            defaultLayout.setVisibility(View.GONE);
+            dataLayout.setVisibility(View.VISIBLE);
+
             arrayList = new ArrayList<>();
             while (cursor.moveToNext()) {
                 ProductList list = new ProductList();
@@ -87,6 +96,10 @@ public class WishlistFragment extends Fragment {
             }
             WishlistAdapter adapter = new WishlistAdapter(getActivity(), arrayList);
             recyclerView.setAdapter(adapter);
+        }
+        else{
+            defaultLayout.setVisibility(View.VISIBLE);
+            dataLayout.setVisibility(View.GONE);
         }
         return view;
     }
