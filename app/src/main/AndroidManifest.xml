@@ -15,6 +15,12 @@
         android:theme="@style/Theme.JuneInternship"
         tools:targetApi="31">
         <activity
+            android:name=".OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".ShippingActivity"
             android:exported="false" />
         <activity
@@ -57,11 +63,9 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_xsiOz9lYtWKHgF"/>
-
+            android:value="rzp_test_xsiOz9lYtWKHgF" />
     </application>
 
 </manifest>

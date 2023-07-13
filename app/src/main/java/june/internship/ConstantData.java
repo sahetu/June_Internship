@@ -23,4 +23,6 @@ public class ConstantData {
 
     public static String CART_TOTAL = "cart_total";
 
+    public static String ORDER_ID = "order_id";
+
 }

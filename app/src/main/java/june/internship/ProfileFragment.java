@@ -14,7 +14,7 @@ import android.widget.Button;
 
 public class ProfileFragment extends Fragment {
 
-    Button profile,changePassword,logout;
+    Button profile,changePassword,logout,myOrder;
     SharedPreferences sp;
     public ProfileFragment() {
         // Required empty public constructor
@@ -28,8 +28,17 @@ public class ProfileFragment extends Fragment {
         sp = getActivity().getSharedPreferences(ConstantData.PREF, Context.MODE_PRIVATE);
 
         profile = view.findViewById(R.id.profile_button);
+        myOrder = view.findViewById(R.id.profile_my_order);
         changePassword = view.findViewById(R.id.profile_change_password);
         logout = view.findViewById(R.id.profile_logout);
+
+        myOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MyOrderActivity.class);
+                startActivity(intent);
+            }
+        });
 
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override

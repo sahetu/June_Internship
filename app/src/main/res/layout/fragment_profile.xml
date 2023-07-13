@@ -16,6 +16,15 @@
         android:text="Profile" />
 
     <Button
+        android:id="@+id/profile_my_order"
+        style="@style/button_18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="My Order" />
+
+    <Button
         android:id="@+id/profile_change_password"
         style="@style/button_18"
         android:layout_width="match_parent"
