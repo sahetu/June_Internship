@@ -34,6 +34,33 @@
         android:text="Change Password" />
 
     <Button
+        android:id="@+id/profile_customer_support"
+        style="@style/button_18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="Customer Support" />
+
+    <Button
+        android:id="@+id/profile_terms_condition"
+        style="@style/button_18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="Terms &amp; Condition" />
+
+    <Button
+        android:id="@+id/profile_payment_policy"
+        style="@style/button_18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="Payment Policy" />
+
+    <Button
         android:id="@+id/profile_logout"
         style="@style/button_18"
         android:layout_width="match_parent"

@@ -1,6 +1,10 @@
 package june.internship;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -8,12 +12,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class OrderDetailActivity extends AppCompatActivity {
 
     TextView orderId,name,contact,address,amount;
     
     SQLiteDatabase db;
     SharedPreferences sp;
+
+    RecyclerView recyclerView;
+    ArrayList<ProductList> arrayList;
+
+    String[] prodId = {"1", "2", "3", "4", "5", "6", "7"};
+    String[] prodName = {"Butter", "Cloth", "Bread", "Makup Kit", "Cloth", "Bread", "Makup Kit"};
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,35 @@ public class OrderDetailActivity extends AppCompatActivity {
                 }
             }
         }
-        
+
+        recyclerView = findViewById(R.id.order_detail_product);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        String cartQuery = "SELECT * FROM CART WHERE ORDERID='"+sp.getString(ConstantData.ORDER_ID,"")+"'";
+        Cursor cartCursor = db.rawQuery(cartQuery,null);
+        if(cartCursor.getCount()>0){
+            arrayList = new ArrayList<>();
+            while (cartCursor.moveToNext()){
+                ProductList list = new ProductList();
+                list.setProductId(cartCursor.getString(3));
+                for (int i = 0; i < prodId.length; i++) {
+                    if (cartCursor.getString(3).equals(prodId[i])) {
+                        list.setName(prodName[i]);
+                        break;
+                    }
+                }
+                list.setPrice(cartCursor.getString(4));
+                list.setUnit(cartCursor.getString(5));
+                list.setDescription(cartCursor.getString(6));
+                list.setImage(Integer.parseInt(cartCursor.getString(7)));
+                list.setQty(cartCursor.getString(8));
+                list.setTotalPrice(cartCursor.getString(9));
+                arrayList.add(list);
+            }
+            OrderDetailAdapter adapter = new OrderDetailAdapter(OrderDetailActivity.this,arrayList);
+            recyclerView.setAdapter(adapter);
+        }
+
     }
 }
